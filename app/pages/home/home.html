@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list inset>
+    <ion-item *ngFor="let linea of lineas" >
+      <h1>{{linea.linea}}</h1>
+      <p>{{linea.descripcion}}</p>
+    </ion-item>
+  </ion-list>
+  <button (click)="borrarDB($event)">BORRAR DB</button>
+
+</ion-content>
