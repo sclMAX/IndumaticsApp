@@ -11,7 +11,11 @@ export class Perfil {
   largo: number;
   pxm: number;
   bxp: number;
+<<<<<<< HEAD
   idlinea: number;
+=======
+  idLinea: number;
+>>>>>>> 8b450e36a5d7c6e7cf80b5f0805935430e2e0157
 }
 
 @Injectable()
@@ -20,6 +24,7 @@ export class Perfiles {
   private db: any;
 
   constructor(private http: Http) { };
+<<<<<<< HEAD
 
   initDB() {
     this.db = new PouchDB('perfiles', { adapter: 'websql' });
@@ -50,9 +55,39 @@ export class Perfiles {
           observer.next(this.perfiles);
           observer.complete();
         }, error => {
+=======
+
+  initDB() {
+    this.db = new PouchDB('perfiles', { adapter: 'websql' });
+  }
+
+  deleteDB() {
+    if (this.db) {
+      this.db.destroy();
+    }
+  }
+
+  getAll() {
+    if (!this.db) {
+      this.initDB();
+    }
+    if (this.perfiles) {
+      return Observable.create(observer => {
+        observer.next(this.perfiles);
+        observer.complete();
+      })
+    } else {
+      return Observable.create(observer => {
+        this.db.allDocs({ include_docs: true })
+        .then(res =>{
+            
+        })
+        .catch(error=>{
+>>>>>>> 8b450e36a5d7c6e7cf80b5f0805935430e2e0157
           observer.error(error);
         });
-    });
+      });
+    }
   }
 
   getAll() {
