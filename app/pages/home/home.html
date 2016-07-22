@@ -1,18 +1,22 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar primary>
+    <ion-title>{{title}}</ion-title>
   </ion-navbar>
 </ion-header>
-
-<ion-content padding>
-  <ion-list inset>
-    <ion-item *ngFor="let linea of lineas" >
-      <h1>{{linea.linea}}</h1>
-      <p>{{linea.descripcion}}</p>
-    </ion-item>
-  </ion-list>
-  <button (click)="borrarDB($event)">BORRAR DB</button>
-
+<ion-content>
+  <ion-card>
+    <img src="img/logoHome.jpg">
+    <ion-list>
+      <ion-list-header>
+        Opciones
+      </ion-list-header>
+      <ion-item (click) = "goCatalogo()">
+        <ion-icon name="list" item-left></ion-icon>
+        <div text-center>
+          Catalogos
+        </div>
+        <ion-icon name="list" item-right margin></ion-icon>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 </ion-content>
