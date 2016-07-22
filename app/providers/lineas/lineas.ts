@@ -4,7 +4,6 @@ import {Observable} from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 
 let PouchDB = require('pouchdb');
-window["PouchDB"] = PouchDB;
 
 export class Linea {
   id: number;
@@ -18,7 +17,7 @@ export class Linea {
 @Injectable()
 export class Lineas {
   private db: any;
-  lineas: Array<Linea>;
+  private lineas: Array<Linea>;
 
   constructor(private http: Http) { };
 
