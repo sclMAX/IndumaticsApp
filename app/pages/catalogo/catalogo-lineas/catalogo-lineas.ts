@@ -14,13 +14,13 @@ export class CatalogoLineasPage {
   }
 
   goPerfiles(l: Linea) {
-    console.log('Linea go:',l)
     this.nav.push(CatalogoPerfilesPage, { linea: l });
   }
   ionViewWillEnter() {
     if (!this.lineas) {
       var l = Loading.create({
-        content: 'Cargando lineas disponibles...'
+        content: 'Cargando lineas disponibles...',
+        duration: 5000,
       });
       this.nav.present(l);
       this.lineasP.getAll()

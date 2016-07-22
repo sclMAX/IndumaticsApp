@@ -5,24 +5,21 @@ import 'rxjs/add/operator/map';
 
 let PouchDB = require('pouchdb');
 
-export class Linea {
+export class Color {
   id: number;
-  linea: string;
-  descripcion: string;
-  encatalogo: boolean;
-
-  constructor() { };
-};
+  color: string;
+  incremento: number;
+}
 
 @Injectable()
-export class Lineas {
+export class Colores {
   private db: any;
-  private lineas: Array<Linea>;
+  private colores: Array<Color>;
 
   constructor(private http: Http) { };
 
   initDB() {
-    this.db = new PouchDB('lineas', { adapter: 'websql' });
+    this.db = new PouchDB('colores', { adapter: 'websql' });
   };
 
   deleteDB() {
@@ -31,7 +28,7 @@ export class Lineas {
     }
   };
 
-  save(data: Array<Linea>) {
+  save(data: Array<Color>) {
     if (!this.db) {
       this.initDB();
     }
@@ -42,12 +39,12 @@ export class Lineas {
 
   update() {
     return Observable.create(observer => {
-      this.http.get('http://www.indumatics.com.ar/home/app/models/lineas.php')
+      this.http.get('http://www.indumatics.com.ar/home/app/models/colores.php')
         .map(res => res.json())
         .subscribe(data => {
-          this.lineas = data;
-          this.save(this.lineas);
-          observer.next(this.lineas);
+          this.colores = data;
+          this.save(this.colores);
+          observer.next(this.colores);
           observer.complete();
         }, error => {
           observer.error(error);
@@ -59,22 +56,22 @@ export class Lineas {
     if (!this.db) {
       this.initDB();
     }
-    if (this.lineas) {
+    if (this.colores) {
       return Observable.create(observer => {
-        observer.next(this.lineas);
+        observer.next(this.colores);
         observer.complete();
-      })
+      });
     } else {
       return Observable.create(observer => {
         this.db.allDocs({ include_docs: true })
           .then(res => {
-            let r: Array<Linea> = [];
+            let r: Array<Color> = [];
             for (let i = 0; i < res.total_rows; i++) {
               r.push(res.rows[i].doc.doc);
             };
             if (r.length > 0) {
-              this.lineas = r;
-              observer.next(this.lineas);
+              this.colores = r;
+              observer.next(this.colores);
               observer.complete();
             } else {
               this.update()
@@ -92,5 +89,6 @@ export class Lineas {
       });
     }
   };
+
 }
 

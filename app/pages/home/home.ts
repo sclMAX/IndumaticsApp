@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, Platform, Alert} from 'ionic-angular';
 import {CatalogoLineasPage} from '../catalogo/catalogo-lineas/catalogo-lineas';
 
 @Component({
@@ -7,11 +7,11 @@ import {CatalogoLineasPage} from '../catalogo/catalogo-lineas/catalogo-lineas';
 })
 export class HomePage {
   title: string;
-  constructor(private navController: NavController) {
+  constructor(private nav: NavController, private platform: Platform) {
     this.title = 'INDUMATICS S.A.';
   }
 
-  goCatalogo(){
-    this.navController.push(CatalogoLineasPage);
+  goCatalogo() {
+    this.nav.push(CatalogoLineasPage);
   }
 }

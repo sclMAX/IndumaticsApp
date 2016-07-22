@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label primary stacked>Cantidad</ion-label>
+      <ion-input type="number" placeholder="Cantidad de unidades" [(ngModel)]="pedidoItem.cantidad" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label primary stacked>Color</ion-label>
+      <ion-select (ngModel)="pedidoItem.color" placeholder="Seleccione un color..." required>
+        <ion-option *ngFor="let c of colores" [value]="c">{{c.color}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label primary stacked>Comentarios</ion-label>
+       <ion-textarea placeholder="Comentarios..." [(ngModel)]="pedidoItem.comentario"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <button fab fab-center>
+    <ion-icon name="add-circle"></ion-icon>
+  </button>
+</ion-content>
