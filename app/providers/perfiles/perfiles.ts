@@ -49,7 +49,6 @@ export class Perfiles {
           this.perfiles = data;
           this.save(this.perfiles);
           observer.next(this.perfiles);
-          observer.complete();
         }, error => {
         });
     });
@@ -62,7 +61,6 @@ export class Perfiles {
     if (this.perfiles) {
       return Observable.create(observer => {
         observer.next(this.perfiles);
-        observer.complete();
       });
     } else {
       return Observable.create(observer => {
@@ -75,12 +73,10 @@ export class Perfiles {
             if (r.length > 0) {
               this.perfiles = r;
               observer.next(this.perfiles);
-              observer.complete();
             } else {
               this.update()
                 .subscribe(data => {
                   observer.next(data);
-                  observer.complete();
                 }, error => {
                   observer.error(error);
                 });

@@ -48,7 +48,6 @@ export class Lineas {
           this.lineas = data;
           this.save(this.lineas);
           observer.next(this.lineas);
-          observer.complete();
         }, error => {
           observer.error(error);
         });
@@ -62,7 +61,6 @@ export class Lineas {
     if (this.lineas) {
       return Observable.create(observer => {
         observer.next(this.lineas);
-        observer.complete();
       })
     } else {
       return Observable.create(observer => {
@@ -75,12 +73,10 @@ export class Lineas {
             if (r.length > 0) {
               this.lineas = r;
               observer.next(this.lineas);
-              observer.complete();
             } else {
               this.update()
                 .subscribe(data => {
                   observer.next(data);
-                  observer.complete();
                 }, error => {
                   observer.error(error);
                 });

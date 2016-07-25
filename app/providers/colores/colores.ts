@@ -45,7 +45,6 @@ export class Colores {
           this.colores = data;
           this.save(this.colores);
           observer.next(this.colores);
-          observer.complete();
         }, error => {
           observer.error(error);
         });
@@ -59,7 +58,6 @@ export class Colores {
     if (this.colores) {
       return Observable.create(observer => {
         observer.next(this.colores);
-        observer.complete();
       });
     } else {
       return Observable.create(observer => {
@@ -72,12 +70,10 @@ export class Colores {
             if (r.length > 0) {
               this.colores = r;
               observer.next(this.colores);
-              observer.complete();
             } else {
               this.update()
                 .subscribe(data => {
                   observer.next(data);
-                  observer.complete();
                 }, error => {
                   observer.error(error);
                 });

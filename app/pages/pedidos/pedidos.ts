@@ -1,19 +1,23 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
+import {Usuario} from '../../providers/usuarios/usuarios';
+import {UsuarioPage} from './usuario/usuario';
 
-/*
-  Generated class for the PedidosPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   templateUrl: 'build/pages/pedidos/pedidos.html',
 })
 export class PedidosPage {
 
-  constructor(private nav: NavController) {
+  title: string;
+  usuario: Usuario;
 
+  constructor(private nav: NavController, private parametros: NavParams) {
+    this.usuario = this.parametros.get('usuario');
+    this.title = "Detalle de pedido";
+  }
+
+  goConfiguracion() {
+    this.nav.push(UsuarioPage, { usuario: this.usuario });
   }
 
 }

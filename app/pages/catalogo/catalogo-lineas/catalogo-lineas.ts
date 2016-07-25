@@ -34,9 +34,7 @@ export class CatalogoLineasPage {
         }, error => {
           l.dismiss();
           console.error.bind(error);
-        }, complete => {
-          l.dismiss();
-        })
+        });
     }
   }
 }

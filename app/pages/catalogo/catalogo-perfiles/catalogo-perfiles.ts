@@ -27,7 +27,7 @@ export class CatalogoPerfilesPage {
   }
 
   addPedido(p: Perfil) {
-    this.nav.push(PedidosAddPage,{perfil:p});
+    this.nav.push(PedidosAddPage, { perfil: p });
   }
 
   filtrar(ev) {
@@ -61,8 +61,6 @@ export class CatalogoPerfilesPage {
         }, error => {
           l.dismiss();
           console.error.bind(error);
-        }, complete => {
-          l.dismiss();
         });
     }
   }
