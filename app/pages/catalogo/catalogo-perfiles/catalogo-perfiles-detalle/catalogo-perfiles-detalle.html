@@ -4,15 +4,11 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-toolbar primary>
-    <ion-buttons end>
-      <button royal (click)="addPedido(perfil)">
-     Agregar
+  
+  <ion-card>
+    <button fab fab-top fab-right (click)="addPedido(perfil)">
       <ion-icon name="cart"></ion-icon>
     </button>
-    </ion-buttons>
-  </ion-toolbar>
-  <ion-card>
     <img src="http://www.indumatics.com.ar/home/img/perfiles/sm/{{perfil.idPerfil}}.png" />
     <ion-card-content text-wrap>
       <ion-card-title text-center>

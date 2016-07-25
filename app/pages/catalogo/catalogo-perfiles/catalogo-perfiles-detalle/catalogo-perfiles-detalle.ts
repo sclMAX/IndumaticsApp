@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {Perfil} from '../../../../providers/perfiles/perfiles';
+import {PedidosAddPage} from '../../../pedidos/pedidos-add/pedidos-add';
 
 @Component({
   templateUrl: 'build/pages/catalogo/catalogo-perfiles/catalogo-perfiles-detalle/catalogo-perfiles-detalle.html',
@@ -15,7 +16,7 @@ export class CatalogoPerfilesDetallePage {
   }
 
   addPedido(p: Perfil) {
-  //  this.nav.push(PedidosAddPage, { perfil: p });
+   this.nav.push(PedidosAddPage, { perfil: p });
   }
 
 }
