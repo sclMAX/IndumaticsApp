@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Toast } from 'ionic-angular';
+import { NavController, NavParams, Toast, Loading} from 'ionic-angular';
 import {Usuarios, Usuario} from '../../../providers/usuarios/usuarios';
 import {HomePage} from '../../home/home';
 import {PedidosPage} from '../pedidos';
@@ -16,20 +16,19 @@ export class UsuarioPage {
   usuario: Usuario;
 
   constructor(private nav: NavController, private formBuilder: FormBuilder,
-    private usuariosP: Usuarios, private parametros: NavParams) {
+    private usuariosP: Usuarios) {
     this.title = "Datos de contacto";
-    this.usuario = this.parametros.get('usuario');
-    if (!this.usuario) { this.usuario = new Usuario() };
+    this.usuario = new Usuario();
     this.usuarioForm = this.createForm();
   }
 
   saveUsuario() {
     let t = Toast.create({
-          duration: 3000,
-          position: 'middle'
-        });
+      duration: 2000,
+      position: 'middle'
+    });
     this.usuariosP.saveUsuario(this.usuario)
-      .subscribe(res => {        
+      .subscribe(res => {
         this.nav.pop(this);
         t.setMessage('Datos de contacto guardados correctamente.');
         this.nav.present(t);
@@ -39,15 +38,31 @@ export class UsuarioPage {
       });
   }
 
+  ionViewWillEnter() {
+    let load = Loading.create({
+      content: 'Buscando pedidos sin enviar...',
+      duration: 3000
+    });
+    this.nav.present(load);
+    this.usuariosP.getUsuario()
+      .subscribe(res => {
+        this.usuario = res;
+        load.dismiss();
+      },
+      error => {
+        load.dismiss();
+      });
+  }
+
   private createForm() {
     return this.formBuilder.group({
       nombre: ['', Validators.required],
       telefono: ['', Validators.required && Validators.minLength(8)],
       email: ['', Validators.required && Validators.minLength(10)],
-      direccion: ['', Validators.required && Validators.minLength (6)],
-      localidad: ['', Validators.required && Validators.minLength (4)],
-      provincia: ['', Validators.required && Validators.minLength (5)],
-      pais: ['', Validators.required && Validators.minLength (5)],
+      direccion: ['', Validators.required && Validators.minLength(6)],
+      localidad: ['', Validators.required && Validators.minLength(4)],
+      provincia: ['', Validators.required && Validators.minLength(5)],
+      pais: ['', Validators.required && Validators.minLength(5)],
     });
   }
 
