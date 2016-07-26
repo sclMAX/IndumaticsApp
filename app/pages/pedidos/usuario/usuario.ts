@@ -24,21 +24,17 @@ export class UsuarioPage {
   }
 
   saveUsuario() {
+    let t = Toast.create({
+          duration: 3000,
+          position: 'middle'
+        });
     this.usuariosP.saveUsuario(this.usuario)
       .subscribe(res => {        
         this.nav.pop(this);
-        let t = Toast.create({
-          message: 'Datos de contacto guardados correctamente.',
-          duration: 3000,
-          position: 'middle'
-        });
+        t.setMessage('Datos de contacto guardados correctamente.');
         this.nav.present(t);
       }, error => {
-        let t = Toast.create({
-          message: 'No se pudo guardar los datos de contacto, intente nuevamente!',
-          duration: 3000,
-          position: 'middle'
-        });
+        t.setMessage('No se pudo guardar los datos de contacto, intente nuevamente!');
         this.nav.present(t);
       });
   }

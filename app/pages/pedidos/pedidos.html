@@ -4,19 +4,11 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  {{usuario.razonSocial}}
-  <br> {{usuario.nombre}}
-  <br> {{usuario.telefono}}
-  <br> {{usuario.email}}
-  <br> {{usuario.direccion}}
-  <br> {{usuario.localidad}}
-  <br> {{usuario.provincia}}
-  <br> {{usuario.pais}}
-  <br>
+  
   <button fab fab-bottom fab-rigth (click)="goConfiguracion()">
     <ion-icon name="options"></ion-icon>
   </button>
-  <button fab fab-bottom fab-center>
-    <ion-icon name="send" [disabled]="!usuario"></ion-icon>
+  <button fab fab-bottom fab-center [disabled]="!pedido" (click)="sendPedido()">
+    <ion-icon name="send" ></ion-icon>
   </button>
 </ion-content>
