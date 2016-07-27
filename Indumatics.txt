@@ -7,3 +7,5 @@ Requerimientos:
 	typings install dt~require --global --save
 -Cordova
 cordova plugin add cordova-plugin-file
+
+ionic plugin add cordova-plugin-email-composer

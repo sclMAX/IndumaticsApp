@@ -40,6 +40,10 @@ export class CatalogoPerfilesPage {
     }
   }
 
+  BorraDB(){
+    this.perfilesP.deleteDB();
+  }
+
   ionViewWillEnter() {
     if (!this.perfiles) {
       let l = Loading.create({

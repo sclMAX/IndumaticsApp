@@ -45,7 +45,8 @@ export class Lineas {
       this.http.get('http://www.indumatics.com.ar/home/app/models/lineas.php')
         .map(res => res.json())
         .subscribe(data => {
-          this.lineas = data;
+          console.log('Nueva Descarga HTTP!');
+          this.lineas = <Array<Linea>>JSON.parse(JSON.stringify(data.data));
           this.save(this.lineas);
           observer.next(this.lineas);
         }, error => {
@@ -71,7 +72,7 @@ export class Lineas {
               r.push(res.rows[i].doc.doc);
             };
             if (r.length > 0) {
-              this.lineas = r;
+              this.lineas = <Array<Linea>>JSON.parse(JSON.stringify(r));
               observer.next(this.lineas);
             } else {
               this.update()

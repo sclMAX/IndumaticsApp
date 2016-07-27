@@ -16,6 +16,14 @@
           Catalogos
         </div>
         <ion-icon name="list" item-right margin></ion-icon>
+      </ion-item >
+      <ion-item *ngIf="isUpdate" (click)="actualizar()"> 
+      <ion-icon name="cloud-download" item-left></ion-icon>
+        <div text-center secondary>
+          Actualizar
+          <p>{{updateMsg}} <br> {{updateFecha.date}}</p>
+        </div>
+        <ion-icon name="cloud-download" item-right margin></ion-icon>
       </ion-item>
        <ion-item (click) = "goPedidos()">
         <ion-icon name="cart" item-left></ion-icon>

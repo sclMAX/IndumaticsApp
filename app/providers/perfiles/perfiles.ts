@@ -46,7 +46,8 @@ export class Perfiles {
       this.http.get('http://www.indumatics.com.ar/home/app/models/perfiles.php')
         .map(res => res.json())
         .subscribe(data => {
-          this.perfiles = data;
+          console.log('Nueva Descarga HTTP!',this);
+          this.perfiles = <Array<Perfil>>JSON.parse(JSON.stringify(data.data));
           this.save(this.perfiles);
           observer.next(this.perfiles);
         }, error => {
@@ -71,7 +72,7 @@ export class Perfiles {
               r.push(res.rows[i].doc.doc);
             };
             if (r.length > 0) {
-              this.perfiles = r;
+              this.perfiles = <Array<Perfil>>JSON.parse(JSON.stringify(r));
               observer.next(this.perfiles);
             } else {
               this.update()

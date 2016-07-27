@@ -46,7 +46,7 @@ export class Usuarios {
         };
         this.db.get('1')
           .then(res => {
-            this.usuario = res.doc;
+            this.usuario =<Usuario> JSON.parse(JSON.stringify(res.doc));
             obs.next(this.usuario);
           })
           .catch(error => {

@@ -4,6 +4,7 @@ import {Usuario, Usuarios} from '../../providers/usuarios/usuarios';
 import {Pedido, Pedidos, PedidoItem} from '../../providers/pedidos/pedidos';
 import {UsuarioPage} from './usuario/usuario';
 import {CatalogoLineasPage} from '../catalogo/catalogo-lineas/catalogo-lineas';
+import { EmailComposer } from 'ionic-native';
 
 @Component({
   templateUrl: 'build/pages/pedidos/pedidos.html',
@@ -108,7 +109,28 @@ export class PedidosPage {
       duration: 5000
     });
     this.nav.present(load);
-    console.log('ENVIANDO PEDIDO....');
+    let msg: string;
+    msg = 'Razon Social: ' + this.pedido.usuario.razonSocial + '<br>';
+    msg += 'Contacto: ' + this.pedido.usuario.nombre + '<br>';
+    msg += 'Tel: ' + this.pedido.usuario.telefono + '<br>';
+    msg += 'E-mail: ' + this.pedido.usuario.email + '<br>';
+    msg += 'Dirección: ' + this.pedido.usuario.direccion + '<br>';
+    msg += 'Localidad: ' + this.pedido.usuario.localidad + '<br>';
+    msg += 'Provincia: ' + this.pedido.usuario.provincia + '<br>';
+    msg += 'Pais: ' + this.pedido.usuario.pais + '<br>';
+    msg += '<br><br>';
+    if (this.pedido.isPedido) {
+      msg += '<h2>Pedido</h2><br>';
+    } else {
+      msg += '<h2>Presupuesto</h2><br>';
+    };
+    msg += '<h3>Cantidad - Perfil  - Color        - Largo (mm) -  Comentarios </h3><br>';
+    msg += '<p>';
+    this.pedido.items.forEach(value => {
+      msg += value.cantidad + ' - ' + value.perfil.idPerfil + ' - ' + value.color.color + ' - '+ value.perfil.largo + ' - ' + value.comentario + '<br>';
+    });
+    msg += '</p>';
+    document.location.href = 'mailto:perfiles@indumatics.com.ar?subject=Consulta desde IndumaticsApp&body=<!DOCTYPE html><html lang="en" dir="ltr">' + msg + '</html>';
   }
 
   ionViewWillEnter() {
@@ -122,6 +144,10 @@ export class PedidosPage {
         this.pedido = res;
         this.items = <Array<PedidoItem>>JSON.parse(JSON.stringify(this.pedido.items));
         load.dismiss();
+        this.usuariosP.getUsuario()
+          .subscribe(res => {
+            this.pedido.usuario = res;
+          })
       },
       error => {
         load.dismiss();

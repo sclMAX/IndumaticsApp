@@ -42,7 +42,8 @@ export class Colores {
       this.http.get('http://www.indumatics.com.ar/home/app/models/colores.php')
         .map(res => res.json())
         .subscribe(data => {
-          this.colores = data;
+          console.log('Nueva Descarga HTTP!');
+          this.colores = <Array<Color>>JSON.parse(JSON.stringify(data.data));
           this.save(this.colores);
           observer.next(this.colores);
         }, error => {
@@ -68,7 +69,7 @@ export class Colores {
               r.push(res.rows[i].doc.doc);
             };
             if (r.length > 0) {
-              this.colores = r;
+              this.colores = <Array<Color>>JSON.parse(JSON.stringify(r));
               observer.next(this.colores);
             } else {
               this.update()
