@@ -3,6 +3,7 @@ import { NavController, NavParams, Loading, Toast, Alert} from 'ionic-angular';
 import {Usuario, Usuarios} from '../../providers/usuarios/usuarios';
 import {Pedido, Pedidos, PedidoItem} from '../../providers/pedidos/pedidos';
 import {UsuarioPage} from './usuario/usuario';
+import {CatalogoLineasPage} from '../catalogo/catalogo-lineas/catalogo-lineas';
 
 @Component({
   templateUrl: 'build/pages/pedidos/pedidos.html',
@@ -13,7 +14,6 @@ export class PedidosPage {
   title: string;
   pedido: Pedido;
   items: Array<PedidoItem>;
-  private itemsTmp: Array<PedidoItem>;
   totalKilos: number;
   isModify: boolean;
 
@@ -23,17 +23,18 @@ export class PedidosPage {
     this.isModify = false;
   }
   saveChanges() {
+    this.pedido.items = this.items;
     this.pedidosP.save(this.pedido)
       .subscribe(res => {
-        this.itemsTmp = <Array<PedidoItem>>JSON.parse(JSON.stringify(this.pedido.items));
+        this.items = <Array<PedidoItem>>JSON.parse(JSON.stringify(this.pedido.items));
         this.isModify = false;
-      }, error=>{
+      }, error => {
         console.error(error);
       })
   };
 
   cancelChanges() {
-    this.items = <Array<PedidoItem>>JSON.parse(JSON.stringify(this.itemsTmp));
+    this.items = <Array<PedidoItem>>JSON.parse(JSON.stringify(this.pedido.items));
     this.isModify = false
   }
 
@@ -80,6 +81,10 @@ export class PedidosPage {
     this.nav.push(UsuarioPage);
   }
 
+  goCatalogo() {
+    this.nav.push(CatalogoLineasPage);
+  }
+
   calcularSubtotal(item: PedidoItem): number {
     return item.cantidad * ((item.perfil.pxm * (item.perfil.largo / 1000))
       + ((item.perfil.pxm * (item.perfil.largo / 1000)) * (item.color.incremento / 100)));
@@ -111,18 +116,15 @@ export class PedidosPage {
       content: 'Buscando pedidos sin enviar...',
       duration: 3000
     });
-    if (!this.pedido) {
-      this.nav.present(load);
-      this.pedidosP.getPedido()
-        .subscribe(res => {
-          this.pedido = res;
-          this.itemsTmp = <Array<PedidoItem>>JSON.parse(JSON.stringify(this.pedido.items));
-          this.items = this.pedido.items;
-          load.dismiss();
-        },
-        error => {
-          load.dismiss();
-        });
-    }
+    this.nav.present(load);
+    this.pedidosP.getPedido()
+      .subscribe(res => {
+        this.pedido = res;
+        this.items = <Array<PedidoItem>>JSON.parse(JSON.stringify(this.pedido.items));
+        load.dismiss();
+      },
+      error => {
+        load.dismiss();
+      });
   }
 }
