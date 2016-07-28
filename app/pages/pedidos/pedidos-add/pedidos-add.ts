@@ -1,7 +1,7 @@
 import { Component, Pipe} from '@angular/core';
 import { NavController, NavParams, Loading, Toast} from 'ionic-angular';
 import {Perfil} from '../../../providers/perfiles/perfiles';
-import {Color, Colores} from '../../../providers/colores/colores';
+import {Color, Colores, ColorList} from '../../../providers/colores/colores';
 import {PedidoItem, Pedido, Pedidos} from '../../../providers/pedidos/pedidos';
 import {FormBuilder, ControlGroup, Validators} from '@angular/common';
 
@@ -77,7 +77,7 @@ export class PedidosAddPage {
             this.nav.present(load);
             this.coloresP.getAll()
               .subscribe(res => {
-                this.colores = res;
+                this.colores = res.colores;
                 load.dismiss();
               }, error => {
                 load.dismiss();

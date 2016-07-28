@@ -4,10 +4,11 @@ import {CatalogoLineasPage} from '../catalogo/catalogo-lineas/catalogo-lineas';
 import {ContactoPage} from '../contacto/contacto';
 import {PedidosPage} from '../pedidos/pedidos';
 import {Update} from '../../providers/update/update';
+import {Colores} from '../../providers/colores/colores';
 
 @Component({
   templateUrl: 'build/pages/home/home.html',
-  providers: [Update],
+  providers: [Update, Colores],
 })
 
 export class HomePage {
@@ -17,7 +18,8 @@ export class HomePage {
   updateMsg: string;
   updateFecha: Date;
 
-  constructor(private nav: NavController, private update: Update) {
+  constructor(private nav: NavController, private update: Update, 
+  private coloresP: Colores) {
     this.title = 'INDUMATICS S.A.';
   }
 
@@ -34,7 +36,8 @@ export class HomePage {
   }
 
   actualizar(){
-    
+    this.coloresP.initDB();
+    this.coloresP.deleteDB();
   }
 
   ionViewWillEnter() {
