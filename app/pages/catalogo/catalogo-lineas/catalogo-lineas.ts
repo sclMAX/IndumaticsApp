@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, Loading } from 'ionic-angular';
-import {Lineas, Linea} from '../../../providers/lineas/lineas';
+import { NavController, Loading, Toast } from 'ionic-angular';
+import {Lineas, LineasList, Linea} from '../../../providers/lineas/lineas';
 import {CatalogoPerfilesPage} from '../catalogo-perfiles/catalogo-perfiles';
 
 @Component({
@@ -9,9 +9,7 @@ import {CatalogoPerfilesPage} from '../catalogo-perfiles/catalogo-perfiles';
 })
 export class CatalogoLineasPage {
   lineas: Array<Linea>;
-  constructor(private nav: NavController, private lineasP: Lineas) {
-    this.lineasP.initDB();
-  }
+  constructor(private nav: NavController, private lineasP: Lineas) { }
 
   goPerfiles(l: Linea) {
     this.nav.push(CatalogoPerfilesPage, { linea: l });
@@ -20,20 +18,19 @@ export class CatalogoLineasPage {
     if (!this.lineas) {
       var l = Loading.create({
         content: 'Cargando lineas disponibles...',
-        duration: 5000,
       });
       this.nav.present(l);
       this.lineasP.getAll()
         .subscribe(data => {
-          if (data) {
-            this.lineas = data;
-          } else {
-            console.error.bind('Error sin datos');
-          }
+          this.lineas = data.lineas;
           l.dismiss();
         }, error => {
           l.dismiss();
-          console.error.bind(error);
+          let t = Toast.create({
+            message:'Sin conexion!',
+            duration:2000
+          });
+          this.nav.present(t);
         });
     }
   }

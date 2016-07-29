@@ -10,14 +10,17 @@ export class Linea {
   linea: string;
   descripcion: string;
   encatalogo: boolean;
-
-  constructor() { };
 };
+
+export class LineasList {
+  fua: Date;
+  lineas: Array<Linea>;
+}
 
 @Injectable()
 export class Lineas {
   private db: any;
-  private lineas: Array<Linea>;
+  private lineas: LineasList;
 
   constructor(private http: Http) { };
 
@@ -28,26 +31,28 @@ export class Lineas {
   deleteDB() {
     if (this.db) {
       this.db.destroy();
+      this.initDB();
     }
   };
 
-  save(data: Array<Linea>) {
+  save(data: LineasList, isUpdate: boolean = false) {
     if (!this.db) {
       this.initDB();
     }
-    for (let i = 0; i < data.length; i++) {
-      this.db.put({ doc: data[i], _id: data[i].id });
-    };
+    if (isUpdate) { this.deleteDB(); };
+    this.db.put({ doc: data, _id: '1' });
   };
 
-  update() {
+  update(isUpdate: boolean = false) {
     return Observable.create(observer => {
       this.http.get('http://www.indumatics.com.ar/home/app/models/lineas.php')
         .map(res => res.json())
         .subscribe(data => {
-          console.log('Nueva Descarga HTTP!');
-          this.lineas = <Array<Linea>>JSON.parse(JSON.stringify(data.data));
-          this.save(this.lineas);
+          console.log('Nueva Descarga HTTP!', this);
+          if (!this.lineas) { this.lineas = new LineasList() };
+          this.lineas.lineas = <Array<Linea>>JSON.parse(JSON.stringify(data.data));
+          this.lineas.fua = new Date();
+          this.save(this.lineas, isUpdate);
           observer.next(this.lineas);
         }, error => {
           observer.error(error);
@@ -65,26 +70,18 @@ export class Lineas {
       })
     } else {
       return Observable.create(observer => {
-        this.db.allDocs({ include_docs: true })
+        this.db.get('1')
           .then(res => {
-            let r: Array<Linea> = [];
-            for (let i = 0; i < res.total_rows; i++) {
-              r.push(res.rows[i].doc.doc);
-            };
-            if (r.length > 0) {
-              this.lineas = <Array<Linea>>JSON.parse(JSON.stringify(r));
-              observer.next(this.lineas);
-            } else {
-              this.update()
-                .subscribe(data => {
-                  observer.next(data);
-                }, error => {
-                  observer.error(error);
-                });
-            }
+            this.lineas = <LineasList>JSON.parse(JSON.stringify(res.doc));
+            observer.next(this.lineas);
           })
           .catch(error => {
-            observer.error(error);
+            this.update()
+              .subscribe(data => {
+                observer.next(data);
+              }, error => {
+                observer.error(error);
+              });
           });
       });
     }

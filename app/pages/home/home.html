@@ -10,29 +10,29 @@
       <ion-list-header>
         Opciones
       </ion-list-header>
-      <ion-item (click) = "goCatalogo()">
+      <ion-item tappable  (click) = "goCatalogo()">
         <ion-icon name="list" item-left></ion-icon>
         <div text-center>
-          Catalogos
+          Catálogos
         </div>
         <ion-icon name="list" item-right margin></ion-icon>
       </ion-item >
-      <ion-item *ngIf="isUpdate" (click)="actualizar()"> 
+      <ion-item tappable  *ngIf="isUpdate" (click)="actualizar()"> 
       <ion-icon name="cloud-download" item-left></ion-icon>
         <div text-center secondary>
           Actualizar
-          <p>{{updateMsg}} <br> {{updateFecha.date}}</p>
+          <p>{{updateMsg}} <br> {{updateFecha}}</p>
         </div>
         <ion-icon name="cloud-download" item-right margin></ion-icon>
       </ion-item>
-       <ion-item (click) = "goPedidos()">
+       <ion-item tappable  (click) = "goPedidos()">
         <ion-icon name="cart" item-left></ion-icon>
         <div text-center>
           Pedidos
         </div>
         <ion-icon name="cart" item-right margin></ion-icon>
       </ion-item>
-      <ion-item (click) = "goContacto()">
+      <ion-item tappable  (click) = "goContacto()">
         <ion-icon name="contacts" item-left></ion-icon>
         <div text-center>
           Contacto

@@ -105,12 +105,14 @@ export class PedidosPage {
 
   sendPedido() {
     let load = Loading.create({
-      content: 'ENVIANDO PEDIDO...',
+      content: 'Preparando Pedido para enviar...',
       duration: 5000
     });
     this.nav.present(load);
     let msg: string;
-    msg = 'Razon Social: ' + this.pedido.usuario.razonSocial + '<br>';
+    msg = '<!DOCTYPE html><html lang="en" dir="ltr"><head><style>';
+    msg += 'table, th, td {border: 1px solid black;border-spacing: 1px;}</style></head>';
+    msg += 'Razon Social: ' + this.pedido.usuario.razonSocial + '<br>';
     msg += 'Contacto: ' + this.pedido.usuario.nombre + '<br>';
     msg += 'Tel: ' + this.pedido.usuario.telefono + '<br>';
     msg += 'E-mail: ' + this.pedido.usuario.email + '<br>';
@@ -124,19 +126,24 @@ export class PedidosPage {
     } else {
       msg += '<h2>Presupuesto</h2><br>';
     };
-    msg += '<h3>Cantidad - Perfil  - Color        - Largo (mm) -  Comentarios </h3><br>';
-    msg += '<p>';
+    msg += '<table style="width:100%;">';
+    msg += '<tr><th>Cantidad</th><th>Perfil</th><th>Color</th><th>Largo</th><th>Comentario</tr>';
     this.pedido.items.forEach(value => {
-      msg += value.cantidad + ' - ' + value.perfil.idPerfil + ' - ' + value.color.color + ' - '+ value.perfil.largo + ' - ' + value.comentario + '<br>';
+      msg += '<tr>';
+      msg += '<td>' + value.cantidad + '</td>';
+      msg += '<td>' + value.perfil.idPerfil + '</td>';
+      msg += '<td>' + value.color.color + '</td>';
+      msg += '<td>' + value.perfil.largo + '</td>';
+      msg += '<td>' + value.comentario + '</td>';
+      msg += '</tr>';
     });
-    msg += '</p>';
-    document.location.href = 'mailto:perfiles@indumatics.com.ar?subject=Consulta desde IndumaticsApp&body=<!DOCTYPE html><html lang="en" dir="ltr">' + msg + '</html>';
+    msg += '</table></html>';
+    document.location.href = 'mailto:perfiles@indumatics.com.ar?subject=Consulta desde IndumaticsApp&body=' + msg;
   }
 
   ionViewWillEnter() {
     let load = Loading.create({
-      content: 'Buscando pedidos sin enviar...',
-      duration: 3000
+      content: 'Buscando pedidos sin enviar...'
     });
     this.nav.present(load);
     this.pedidosP.getPedido()
@@ -147,7 +154,11 @@ export class PedidosPage {
         this.usuariosP.getUsuario()
           .subscribe(res => {
             this.pedido.usuario = res;
-          })
+            load.dismiss();
+          }, error => {
+            this.pedido.usuario = null;
+            load.dismiss();
+          });
       },
       error => {
         load.dismiss();

@@ -30,26 +30,28 @@ export class Colores {
   deleteDB() {
     if (this.db) {
       this.db.destroy();
+      this.initDB();
     }
   };
 
-  save(data: ColorList) {
+  save(data: ColorList, isUpdate: boolean = false) {
     if (!this.db) {
       this.initDB();
     }
-      this.db.put({ doc: data, _id: '1' });
+    if (isUpdate) { this.deleteDB(); }
+    this.db.put({ doc: data, _id: '1' });
   };
 
-  update() {
+  update(isUpdate: boolean = false) {
     return Observable.create(observer => {
       this.http.get('http://www.indumatics.com.ar/home/app/models/colores.php')
         .map(res => res.json())
         .subscribe(data => {
-          console.log('Nueva Descarga HTTP!');
-          if(!this.colores) { this.colores = new ColorList();};
+          console.log('Nueva Descarga HTTP!', this);
+          if (!this.colores) { this.colores = new ColorList(); };
           this.colores.colores = <Array<Color>>JSON.parse(JSON.stringify(data.data));
           this.colores.fua = new Date();
-          this.save(this.colores);
+          this.save(this.colores, isUpdate);
           observer.next(this.colores);
         }, error => {
           observer.error(error);
@@ -67,26 +69,18 @@ export class Colores {
       });
     } else {
       return Observable.create(observer => {
-        this.db.allDocs({ include_docs: true })
+        this.db.get('1')
           .then(res => {
-            let r: Array<Color> = [];
-            for (let i = 0; i < res.total_rows; i++) {
-              r.push(res.rows[i].doc.doc);
-            };
-            if (r.length > 0) {
-              this.colores = <ColorList>JSON.parse(JSON.stringify(r));
-              observer.next(this.colores);
-            } else {
-              this.update()
-                .subscribe(data => {
-                  observer.next(data);
-                }, error => {
-                  observer.error(error);
-                });
-            }
+            this.colores = <ColorList>JSON.parse(JSON.stringify(res.doc));
+            observer.next(this.colores);
           })
           .catch(error => {
-            observer.error(error);
+            this.update()
+              .subscribe(data => {
+                observer.next(data);
+              }, error => {
+                observer.error(error);
+              });
           });
       });
     }

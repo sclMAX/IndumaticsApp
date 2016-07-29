@@ -51,7 +51,7 @@
   <button fab fab-bottom fab-rigth [disabled]="isModify" (click)="goConfiguracion()">
     <ion-icon name="options"></ion-icon>
   </button>
-  <button fab fab-bottom fab-center [disabled]="(!pedido || isModify || !(items.length > 0))" (click)="sendPedido()">
+  <button fab fab-bottom fab-center [disabled]="(!pedido || isModify || !(items.length > 0) || !pedido.usuario)" (click)="sendPedido()">
     <ion-icon name="send" ></ion-icon>
   </button>
 </ion-footer>

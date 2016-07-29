@@ -43,4 +43,7 @@
     <ion-icon name="person-add"></ion-icon>
   </button>
   </form>
+  <button fab fab-bottom fab-rigth [disabled]="!isInDB" (click)="borrarDB()">
+    <ion-icon name="trash"></ion-icon>
+  </button>
 </ion-content>

@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Loading } from 'ionic-angular';
-import {Perfiles, Perfil} from '../../../providers/perfiles/perfiles';
+import { NavController, NavParams, Loading, Toast} from 'ionic-angular';
+import {Perfiles, PerfilesList, Perfil} from '../../../providers/perfiles/perfiles';
 import {Linea} from '../../../providers/lineas/lineas';
 import {CatalogoPerfilesDetallePage} from './catalogo-perfiles-detalle/catalogo-perfiles-detalle';
-import {PedidosAddPage} from '../../pedidos/pedidos-add/pedidos-add'
+import {PedidosAddPage} from '../../pedidos/pedidos-add/pedidos-add';
+import {PedidosPage} from '../../pedidos/pedidos';
+import {HomePage} from '../../home/home';
 
 @Component({
   templateUrl: 'build/pages/catalogo/catalogo-perfiles/catalogo-perfiles.html',
@@ -40,31 +42,33 @@ export class CatalogoPerfilesPage {
     }
   }
 
-  BorraDB(){
-    this.perfilesP.deleteDB();
+  goPedidos() {
+    this.nav.push(PedidosPage);
+  }
+
+  goHome(){
+    this.nav.setRoot(HomePage);
   }
 
   ionViewWillEnter() {
     if (!this.perfiles) {
       let l = Loading.create({
         content: 'Cargando perfiles de la linea ' + this.linea.linea + '...',
-        duration: 5000,
       });
       this.nav.present(l);
       this.perfilesP.getAll()
         .subscribe(data => {
-          if (data) {
-            this.perfilesAll = data;
-            this.perfiles = this.perfilesAllLinea = this.perfilesAll.filter((perfil) => {
-              return (perfil.idlinea === this.linea.id);
-            });
-          } else {
-            console.error.bind('Error sin datos');
-          }
+          this.perfilesAll = data.perfiles;
+          this.perfiles = this.perfilesAllLinea = this.perfilesAll.filter((perfil) => {
+            return (perfil.idlinea === this.linea.id);
+          });
           l.dismiss();
         }, error => {
           l.dismiss();
-          console.error.bind(error);
+          let t = Toast.create({
+            message: 'Sin conexion!',
+            duration: 2000
+          })
         });
     }
   }

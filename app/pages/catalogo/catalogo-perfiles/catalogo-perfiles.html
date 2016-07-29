@@ -1,9 +1,14 @@
 <ion-header>
   <ion-navbar primary>
     <ion-title>{{ title }}</ion-title>
+    <ion-buttons start>
+      <button (click)="goHome()">
+        <ion-icon name="home"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-buttons end>
-      <button (click)="BorraDB()">
-        <ion-icon name="search"></ion-icon>
+      <button (click)="goPedidos()">
+        <ion-icon name="cart"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -15,7 +20,7 @@
 <ion-content padding>
   <ion-list>
     <ion-item-sliding *ngFor="let perfil of perfiles" text-wrap>
-      <ion-item (click)="goPerfil(perfil)">
+      <ion-item tappable  (click)="goPerfil(perfil)">
         <ion-thumbnail item-left>
           <img  src="http://www.indumatics.com.ar/home/img/perfiles/xs/{{perfil.idPerfil}}.png" >
         </ion-thumbnail>

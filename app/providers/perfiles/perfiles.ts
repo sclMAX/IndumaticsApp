@@ -15,10 +15,15 @@ export class Perfil {
   idLinea: number;
 }
 
+export class PerfilesList {
+  fua: Date;
+  perfiles: Array<Perfil>;
+}
+
 @Injectable()
 export class Perfiles {
   private db: any;
-  private perfiles: Array<Perfil>;
+  private perfiles: PerfilesList;
 
   constructor(private http: Http) { };
 
@@ -29,26 +34,27 @@ export class Perfiles {
   deleteDB() {
     if (this.db) {
       this.db.destroy();
-    }
-  }
-
-  save(data: Array<Perfil>) {
-    if (!this.db) {
       this.initDB();
     }
-    for (let i = 0; i < data.length; i++) {
-      this.db.put({ doc: data[i], _id: data[i].idPerfil });
-    };
   }
 
-  update() {
+  save(data: PerfilesList, isUpdate: boolean = false) {
+    if (!this.db) {
+      this.initDB();
+    };
+    if (isUpdate) { this.deleteDB() };
+    this.db.put({ doc: data, _id: '1' });
+  }
+
+  update(isUpdate: boolean = false) {
     return Observable.create(observer => {
       this.http.get('http://www.indumatics.com.ar/home/app/models/perfiles.php')
         .map(res => res.json())
         .subscribe(data => {
-          console.log('Nueva Descarga HTTP!',this);
-          this.perfiles = <Array<Perfil>>JSON.parse(JSON.stringify(data.data));
-          this.save(this.perfiles);
+          console.log('Nueva Descarga HTTP!', this);
+          if (!this.perfiles) { this.perfiles = new PerfilesList() };
+          this.perfiles.perfiles = <Array<Perfil>>JSON.parse(JSON.stringify(data.data));
+          this.save(this.perfiles, isUpdate);
           observer.next(this.perfiles);
         }, error => {
         });
@@ -65,26 +71,18 @@ export class Perfiles {
       });
     } else {
       return Observable.create(observer => {
-        this.db.allDocs({ include_docs: true })
+        this.db.get('1')
           .then(res => {
-            let r: Array<Perfil> = [];
-            for (let i = 0; i < res.total_rows; i++) {
-              r.push(res.rows[i].doc.doc);
-            };
-            if (r.length > 0) {
-              this.perfiles = <Array<Perfil>>JSON.parse(JSON.stringify(r));
-              observer.next(this.perfiles);
-            } else {
-              this.update()
-                .subscribe(data => {
-                  observer.next(data);
-                }, error => {
-                  observer.error(error);
-                });
-            };
+            this.perfiles = <PerfilesList>JSON.parse(JSON.stringify(res.doc));
+            observer.next(this.perfiles);
           })
           .catch(error => {
-            observer.error(error);
+            this.update()
+              .subscribe(data => {
+                observer.next(data);
+              }, error => {
+                observer.error(error);
+              });
           });
       });
     }

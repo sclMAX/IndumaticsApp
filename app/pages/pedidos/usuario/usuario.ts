@@ -14,10 +14,12 @@ export class UsuarioPage {
   usuarioForm: ControlGroup;
   title: string;
   usuario: Usuario;
+  isInDB: boolean;
 
   constructor(private nav: NavController, private formBuilder: FormBuilder,
     private usuariosP: Usuarios) {
     this.title = "Datos de contacto";
+    this.isInDB = false;
     this.usuario = new Usuario();
     this.usuarioForm = this.createForm();
   }
@@ -38,18 +40,23 @@ export class UsuarioPage {
       });
   }
 
+  borrarDB() {
+    this.usuariosP.deleteDB();
+  }
+
   ionViewWillEnter() {
     let load = Loading.create({
-      content: 'Buscando pedidos sin enviar...',
-      duration: 3000
+      content: 'Buscando pedidos sin enviar...'
     });
     this.nav.present(load);
     this.usuariosP.getUsuario()
       .subscribe(res => {
+        this.isInDB = true;
         this.usuario = res;
         load.dismiss();
       },
       error => {
+        this.isInDB = false;
         load.dismiss();
       });
   }

@@ -3,9 +3,8 @@ import { Http } from '@angular/http';
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 export class UpdateData {
-  isUpdate: boolean = false;
   msg: string = '';
-  fecha:Date;
+  fecha: Date;
 }
 @Injectable()
 export class Update {
@@ -24,11 +23,11 @@ export class Update {
           .map(res => res.json())
           .subscribe(data => {
             console.log('Nueva Descarga HTTP!', this);
-            console.log('data', data)
             if (data) {
-              this.updateData = <UpdateData>JSON.parse(JSON.stringify(data));
-              console.log('UPDATEDATA:', this.updateData)
-              observer.next( this.updateData);
+              if (!this.updateData) { this.updateData = new UpdateData() };
+              this.updateData.msg = <string>JSON.parse(JSON.stringify(data.msg));
+              this.updateData.fecha = new Date(<string>JSON.parse(JSON.stringify(data.fecha.date)));
+              observer.next(this.updateData);
             } else {
               observer.error('Sin Datos!');
             }
